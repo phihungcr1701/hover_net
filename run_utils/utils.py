@@ -6,6 +6,18 @@ from collections import OrderedDict
 import numpy as np
 import torch
 import torch.nn as nn
+
+# imgaug 0.4.0 expects np.sctypes, which was removed in NumPy 2.
+# Patch it here so inference can run on Kaggle's default NumPy.
+if not hasattr(np, "sctypes"):
+    np.sctypes = {
+        "int": [np.int8, np.int16, np.int32, np.int64],
+        "uint": [np.uint8, np.uint16, np.uint32, np.uint64],
+        "float": [np.float16, np.float32, np.float64],
+        "complex": [np.complex64, np.complex128],
+        "others": [np.bool_, np.bytes_, np.str_, np.void],
+    }
+
 from imgaug import imgaug as ia
 from termcolor import colored
 from torch.autograd import Variable

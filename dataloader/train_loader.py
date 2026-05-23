@@ -9,6 +9,18 @@ import numpy as np
 import scipy.io as sio
 import torch.utils.data
 
+
+# imgaug 0.4.0 expects np.sctypes, which was removed in NumPy 2.
+# Keep the repo working on Kaggle's default NumPy without downgrading globally.
+if not hasattr(np, "sctypes"):
+    np.sctypes = {
+        "int": [np.int8, np.int16, np.int32, np.int64],
+        "uint": [np.uint8, np.uint16, np.uint32, np.uint64],
+        "float": [np.float16, np.float32, np.float64],
+        "complex": [np.complex64, np.complex128],
+        "others": [np.bool_, np.bytes_, np.str_, np.void],
+    }
+
 import imgaug as ia
 from imgaug import augmenters as iaa
 from misc.utils import cropping_center
